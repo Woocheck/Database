@@ -4,87 +4,119 @@
 
 #include "./database.h"
 
+int writeFileDatabase( DataBase * local_db )
+{
+    FILE * file = fopen( DATA_BASE_FILE, "bw" );
+    if (file != NULL) 
+    {        
+        fwrite( local_db, sizeof( DataBase ), 1, file );
+        fclose(file);
+    }
+}
 
-void threadInitDataBase( struct Arguments * arguments )
+int readFileDatabase( DataBase * local_db )
+{
+    FILE * file = fopen( DATA_BASE_FILE, "br" );
+    if (file != NULL) 
+    {        
+        fwrite( local_db, sizeof( DataBase ), 1, file );
+        fclose(file);
+    }
+}
+
+void errorInfo( char * elementName, int* threadResult )
+{
+    fprintf(stderr,"Error - create() in %s - code: %d\n", elementName,threadResult);
+    exit(EXIT_FAILURE);
+};
+
+
+
+void threadInitDataBase( DataBase * local_db )
 { 
-    
-    if( access( arguments->fileName , F_OK ) != -1 ) 
-    {
-        FILE * file = fopen("thisFile", "rb");
-        if (file != NULL) 
+    pthread_mutex_trylock( &mutexFileOperations );
+
+        if( access( DATA_BASE_FILE, F_OK ) != -1 ) 
         {
-            fwrite( arguments->local_db, 
-                    sizeof( struct DataBase ), 
-                    1, 
-                    file );
-            fclose(file);
+            readFileDatabase( local_db);
+        } 
+        else 
+        {
+            writeFileDatabase( local_db); 
         }
 
-    } 
-    else 
-    {
-        FILE * file = fopen("thisFile", "br");
-        if (file != NULL) 
-        {
-            fwrite( arguments->local_db, 
-                    sizeof( struct DataBase ), 
-                    1, 
-                    file );
-            fclose(file);
-        } 
-    }
+    pthread_mutex_unlock( &mutexFileOperations );
     pthread_exit( NULL );
 };
 
-int InitDataBase( char * fileName, struct DataBase * local_db )
+int InitDataBase( DataBase * local_db )
 {
-    struct Arguments arguments;
-
-    arguments.fileName = fileName;
-    arguments.local_db = local_db;
-
-    pthread_mutex_lock( &mutexFileOperations );
-    
     int threadResult;
     threadResult = pthread_create(&mutexFileOperations, 
                                    NULL, 
                                    threadInitDataBase, 
-                                   &arguments );
+                                   local_db );
     if( threadResult )
-     {
-         fprintf(stderr,"Error - pthread_create() return code: %d\n",threadResult);
-         exit(EXIT_FAILURE);
-     }
-    
-    pthread_mutex_unlock( &mutexFileOperations );
+        errorInfo( "init database", threadResult );
 }; 
 
-int threadReadDataBase( struct Arguments arguments )
+int threadReadDataBase( DataBase * local_db )
 {
-    
-};
+    pthread_mutex_trylock( &mutexFileOperations );
 
-int readDataBase( struct DataBase * local_db )
-{
-    pthread_mutex_lock( &mutexFileOperations );
+        readFileDatabase( local_db );
 
     pthread_mutex_unlock( &mutexFileOperations );
+    pthread_exit( NULL );
 };
 
-int threadChangeElementDataBase( struct Arguments arguments )
+int readDataBase( DataBase * local_db )
 {
-
-};
-
-int changeElementDataBase( struct Record * record )
-{
-    pthread_mutex_lock( &mutexFileOperations );
-
-    int threadResult;
-    threadResult = pthread_create((&mutexFileOperations, 
+     int threadResult;
+    threadResult = pthread_create(&mutexFileOperations, 
                                    NULL, 
                                    threadChangeElementDataBase, 
-                                   &arguments );
+                                   local_db );
+    if( threadResult )
+        errorInfo( "read database", threadResult );
+};
+
+int writeReadDataBase( DataBase * local_db )
+{
+    pthread_mutex_trylock( &mutexFileOperations );
+
+        writeFileDatabase( local_db );
 
     pthread_mutex_unlock( &mutexFileOperations );
+    pthread_exit( NULL );
+};
+
+int writeDataBase( DataBase * local_db )
+{
+    int threadResult;
+    threadResult = pthread_create(&mutexFileOperations, 
+                                   NULL, 
+                                   threadChangeElementDataBase, 
+                                   local_db );
+    if( threadResult )
+        errorInfo( "write database", threadResult );
+};
+
+int threadChangeElementDataBase( DataBase * local_db, 
+                                 Record * record )
+{
+    pthread_mutex_trylock( &mutexFileOperations );
+        
+    pthread_mutex_unlock( &mutexFileOperations );
+};
+
+int changeElementDataBase( DataBase * local_db, Record * record )
+{
+    int threadResult;
+    threadResult = pthread_create(&mutexFileOperations, 
+                                   NULL, 
+                                   threadChangeElementDataBase, 
+                                   record );
+    if( threadResult )
+        errorInfo( "change element", threadResult );
 };

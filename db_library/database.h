@@ -13,24 +13,30 @@ struct Arguments
     struct DataBase * local_db;
 };
 
-struct Record {
+typedef struct record {
     unsigned int key;
     char name[100];
     float value1;
     int value2;
-};
+} Record;
 
-struct DataBase {
+typedef struct database {
     Record record[ MAX_DATABASE_SIZE ];
-};
+} DataBase;
 
-extern void threadInitDataBase( struct Arguments arguments ); 
-extern int InitDataBase( char * fileName, DataBase * local_db ); 
+extern void threadInitDataBase( DataBase * local_db ); 
+extern int InitDataBase( DataBase * local_db ); 
 
-extern int threadReadDataBase( struct Arguments arguments );
+extern int threadReadDataBase( DataBase * local_db );
 extern int readDataBase( DataBase * local_db );
 
-extern int threadChangeElementDataBase( struct Arguments arguments );
-extern int changeElementDataBase( Record * record  );
+extern int writeReadDataBase( DataBase * local_db );
+extern int writeDataBase( DataBase * local_db );
+
+extern int threadChangeElementDataBase( DataBase * local_db, 
+                                        Record * record );
+extern int changeElementDataBase( DataBase * local_db, 
+                                  Record * record  );
+                                  
 
 #endif 
