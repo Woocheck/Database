@@ -40,3 +40,24 @@ DataBase * makeDatabase( DataBase * local_db )
 
     }
 };
+
+void printRecord( Record * record)
+{
+    printf( " | %4i | %20s | %6i | %10i | \n",
+                record->key,
+                record->name,
+                record->value1,
+                record->value2 );
+};
+
+void printDataBase( DataBase * dataBase )
+{
+    for( int i = 0; i<MAX_DATABASE_SIZE; i++ )
+    {
+        printf( " | %4i | %20s | %6i | %10i | \n",
+                dataBase->record[ i ].key,
+                dataBase->record[ i ].name,
+                dataBase->record[ i ].value1,
+                dataBase->record[ i ].value2 );
+    }
+};

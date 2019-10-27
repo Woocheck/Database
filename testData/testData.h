@@ -12,4 +12,7 @@
 Record * makeRecord( int recordNumber );
 DataBase * makeDatabase( DataBase * local_db );
 
+void printRecord( Record * record);
+void printDataBase( DataBase * dataBase );
+
 #endif 
