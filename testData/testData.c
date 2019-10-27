@@ -6,23 +6,23 @@ Record *  makeRecord( int recordNumber )
 {
     static Record record;
 
-    int seed;
-    time_t tt;
-    seed = time(&tt);
-    srand(seed);
+    static int isFirstTimeUsed = 1;
+    if(isFirstTimeUsed)
+    {
+        int seed = time(NULL);
+        srand(seed);
+        isFirstTimeUsed = 0;
+    }
 
-    char name[10][100] = { "Kompot", "Wiadro", "Parapet", 
+    char name[10][20] = { "Kompot", "Wiadro", "Parapet", 
                            "Okno", "Winda", "Taki Maly dynks", 
                            "Kaloryfer", "Zegarek", "Krzeslo", "Kubek" };
       
         record.key = recordNumber;
-
-        int randomNamePosition = rand() % sizeof( name );
-        strncpy( record.name, name[ randomNamePosition ], 100);
-        
-        pid_t pidNumber = getpid();
+        int randomNamePosition = rand() % 10;
+        strncpy( record.name, name[ randomNamePosition ], sizeof( name[ randomNamePosition ] )-1 );
+        int pidNumber = getpid();
         record.value1 = pidNumber;
-
         record.value2 = pidNumber + recordNumber;
 
     return &record;
@@ -33,12 +33,13 @@ DataBase * makeDatabase( DataBase * local_db )
     for( int i = 0; i< MAX_DATABASE_SIZE; i++ )
     {
         Record * record = makeRecord( i ); 
-        local_db->record->key = record->key;
-        strncpy( local_db->record->name, record->name, 100 );
-        local_db->record->value1 = record->value1;
-        local_db->record->value2 = record->value2;
-
+        
+        (local_db->record)[i].key = record->key;
+        strcpy( (local_db->record)[i].name, record->name );
+        (local_db->record)[i].value1 = record->value1;
+        (local_db->record)[i].value2 = record->value2;
     }
+    return local_db;
 };
 
 void printRecord( Record * record)
@@ -60,4 +61,5 @@ void printDataBase( DataBase * dataBase )
                 dataBase->record[ i ].value1,
                 dataBase->record[ i ].value2 );
     }
+    printf("\n");
 };

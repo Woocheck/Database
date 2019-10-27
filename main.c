@@ -2,15 +2,28 @@
 #include <stdlib.h>
 
 #include "./db_library/database.h"
+#include "./testData/testData.h"
 
-
-int main(int argc, char const *argv[])
+int main(void)
 {
-    struct DataBase * local_db;
-    local_db = malloc( sizeof( struct DataBase ) );
+    DataBase * local_db;
+    local_db = newDataBase( MAX_DATABASE_SIZE );
 
     InitDataBase( local_db );
+    sleep(3);
+    printDataBase( local_db );
+    makeDatabase( local_db );
+    printDataBase( local_db );
+
+    writeDataBase( local_db );
     
-    free( local_db );
+    makeDatabase( local_db );
+    printDataBase( local_db );
+    sleep(3);
+    readDataBase( local_db);
+
+    printDataBase( local_db );
+
+    deleteDataBase( local_db );
     return 0;
 }
