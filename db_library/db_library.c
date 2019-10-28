@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/file.h>
 
 #include "./database.h"
 
@@ -34,37 +35,50 @@ void deleteDataBase( DataBase * local_db )
     }
 };
 
-extern void copyData(  int direction, Record * dest, DataBase * src )
+extern void copyData(  int direction, Record * file, DataBase * local_db )
 {
     for( int i = 0; i< MAX_DATABASE_SIZE; i++ )
     {
         if( direction == 1)
         {
-            dest[i].key = (src->record)[i].key;
-            strcpy( dest[i].name, (src->record)[i].name );
-            dest[i].value1 = (src->record)[i].value1;
-            dest[i].value2 = (src->record)[i].value2;
+            file[i].key = (local_db->record)[i].key;
+            strcpy( file[i].name, (local_db->record)[i].name );
+            file[i].value1 = (local_db->record)[i].value1;
+            file[i].value2 = (local_db->record)[i].value2;
         }
         else
         {
-            (src->record)[i].key = dest[i].key;
-            strcpy( (src->record)[i].name, dest[i].name );
-            (src->record)[i].value1 = dest[i].value1;
-            (src->record)[i].value2 = dest[i].value2;
+            (local_db->record)[i].key = file[i].key;
+            strcpy( (local_db->record)[i].name, file[i].name );
+            (local_db->record)[i].value1 = file[i].value1;
+            (local_db->record)[i].value2 = file[i].value2;
         }
         
     }
 };
 
+int lock( FILE * file)
+{
+    if( flock( fileno( file ), LOCK_EX ) < 0 )
+    {
+        printf("File locking failed.");
+        return -1;
+    }
+    return 0;
+}
+
 void writeFileDatabase( DataBase * local_db )
 {
+    
+    
     FILE * file = fopen( DATA_BASE_FILE, "wb" );
     if (file != NULL) 
     {     
         Record tempDataBase[ MAX_DATABASE_SIZE ];
         int toFile = 1;
         copyData( toFile, tempDataBase, local_db );
-
+        
+        lock( file );
         fwrite( tempDataBase, sizeof( Record ), MAX_DATABASE_SIZE, file );
         fclose(file);
     }
@@ -77,6 +91,7 @@ void readFileDatabase( DataBase * local_db )
     {   
         Record tempDataBase[ MAX_DATABASE_SIZE ];     
         
+        lock( file );
         fread( tempDataBase, sizeof( Record ), MAX_DATABASE_SIZE, file );
         fclose(file);
         
