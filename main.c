@@ -10,7 +10,7 @@ int main(void)
     local_db = newDataBase( MAX_DATABASE_SIZE );
 
     InitDataBase( local_db );
-    sleep(3);
+    sleep(1);
     printDataBase( local_db );
     makeDatabase( local_db );
     printDataBase( local_db );
@@ -19,7 +19,7 @@ int main(void)
     
     makeDatabase( local_db );
     printDataBase( local_db );
-    sleep(3);
+    sleep(1);
     readDataBase( local_db);
 
     printDataBase( local_db );
