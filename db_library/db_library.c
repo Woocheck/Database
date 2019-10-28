@@ -183,13 +183,16 @@ void writeDataBase( DataBase * local_db )
         errorInfo( "write database", &threadResult );
 };
 
-void changeRecord( Record * recordInLocalDatabase, Record * newRecord )
+void changeRecord( Record * oldRecord , Record * newRecord )
 {
-    
+    oldRecord->key = newRecord->key;
+    strcpy( oldRecord->name, newRecord->name );
+    oldRecord->value1 = newRecord->value1;
+    oldRecord->value2 = newRecord->value2;
 };
 
-void changeElementDataBase( DataBase * local_db, Record * record )
+void changeElementDataBase( DataBase * local_db, Record * newRecord )
 {
-    unsigned int numberRecordToChange = record->key;
-    changeRecord( (local_db->record) , record);
+    Record * recordToChange = &(local_db->record)[newRecord->key];
+    changeRecord(  recordToChange, newRecord);
 };
