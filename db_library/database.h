@@ -17,6 +17,7 @@ typedef struct record {
 typedef struct database {
     Record * record;
     size_t size;
+    int timeStamp;
 } DataBase;
 
 struct Arguments
@@ -45,6 +46,6 @@ extern void threadChangeElementDataBase( DataBase * local_db,
                                         Record * record );
 extern void changeElementDataBase( DataBase * local_db, 
                                   Record * record  );
-                                  
+extern void changeRecord( Record * oldRecord , Record * newRecord ); 
 
 #endif 

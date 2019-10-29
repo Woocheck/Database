@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/file.h>
+#include <time.h>
 
 #include "./database.h"
 
@@ -22,7 +23,8 @@ extern DataBase * newDataBase( size_t size )
     }
 
     newLocalDatabase->size = size;
-
+    newLocalDatabase->timeStamp = time( NULL );
+    
     return newLocalDatabase;
 };
 
@@ -97,6 +99,7 @@ void readFileDatabase( DataBase * local_db )
         
         int toDatabase = 0;
         copyData( toDatabase, tempDataBase, local_db);
+        local_db->timeStamp = time( NULL );
     }
 }
 
@@ -104,7 +107,7 @@ void errorInfo( const char * elementName, int * threadResult )
 {
     fprintf(stderr,"Error - create() in %s - code: %d\n", elementName,threadResult);
     exit(EXIT_FAILURE);
-};
+}
 
 
 

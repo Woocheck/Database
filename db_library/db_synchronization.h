@@ -3,6 +3,8 @@
 
 #define BUFOR_SIZE 15
 
+
+
 #include <time.h>
 #include "./database.h"
 
@@ -27,7 +29,8 @@ typedef struct sharedMemoryStruct
     Record dbMap[ MAX_DATABASE_SIZE ];
 } SharedMemoryStruct;
 
-void initSynchronisatoin( DataBase * local_db );
-void writeDataSynchronisation( DataBase * local_db );
+SharedMemoryStruct * initBuffer();
+void writeDataToBuffer( DataBase * local_db,  Record * record );
+void readDatafromBuffer( DataBase * local_db );
 
 #endif
