@@ -12,6 +12,7 @@
 
 #include "./API_db_library.h"
 #include "./db_synchronization.h"
+#include "./db_utility.h"
 
 int getNewPositionInBuffer( SharedMemoryStruct * buffer )
 {

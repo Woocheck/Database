@@ -1,11 +1,10 @@
-#ifndef _DB_CYNCH_ 
+#ifndef _DB_SYNCH_ 
 #define _DB_SYNCH_
 
 #define BUFOR_SIZE 15
 
 #include <time.h>
-#include "./API_db_library.h"
-#include "./db_utility.h"
+
 
 typedef struct singleChange 
 {
@@ -32,5 +31,6 @@ SharedMemoryStruct * initBuffer();
 void writeDataToBuffer( DataBase * local_db,  Record * record );
 void readDatafromBuffer( DataBase * local_db );
 void sendInfoAboutChanges( DataBase * local_db );
+void readRecordsChangesFromBuffer( DataBase * local_db );
 
 #endif
