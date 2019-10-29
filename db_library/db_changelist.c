@@ -12,11 +12,12 @@ void push(List** list, int newElement)
     new_node->next = (*list)->head;  
     (*list)->head = new_node; 
     
-    while(new_node->next!=NULL){
+    while(new_node->next!=NULL)
+    {
         new_node=new_node->next;
     }
-    (*list)->tail=new_node;
-            
+ 
+    (*list)->tail=new_node;           
 }
 
 int pop(List** list)
@@ -47,10 +48,12 @@ int pop(List** list)
 void print_list(List** list)
 {
     node* list_element = (*list)->head; 
-    while(list_element != NULL) {
+    while(list_element != NULL) 
+    {
         printf("%d ", list_element ->changedElementNumber);
         list_element = list_element->next;
     }
+ 
     printf("\n");
 }
 
