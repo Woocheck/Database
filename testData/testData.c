@@ -2,7 +2,7 @@
 
 #include "./testData.h"
 
-Record *  makeRecord( int recordNumber ) 
+Record *  makeTestRecord( int recordNumber ) 
 {
     static Record record;
 
@@ -28,11 +28,11 @@ Record *  makeRecord( int recordNumber )
     return &record;
 }
 
-DataBase * makeDatabase( DataBase * local_db )
+DataBase * makeTestDatabase( DataBase * local_db )
 {
     for( int i = 0; i< MAX_DATABASE_SIZE; i++ )
     {
-        Record * record = makeRecord( i ); 
+        Record * record = makeTestRecord( i ); 
         
         (local_db->record)[i].key = record->key;
         strcpy( (local_db->record)[i].name, record->name );

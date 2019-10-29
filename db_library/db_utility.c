@@ -2,25 +2,26 @@
 #include "./db_utility.h"
 
 
-void copyData(  int direction, Record * file, DataBase * local_db )
+
+void copyToFile( Record * file, DataBase * local_db )
 {
     for( int i = 0; i< MAX_DATABASE_SIZE; i++ )
     {
-        if( direction == 1)
-        {
             file[i].key = (local_db->record)[i].key;
             strcpy( file[i].name, (local_db->record)[i].name );
             file[i].value1 = (local_db->record)[i].value1;
             file[i].value2 = (local_db->record)[i].value2;
-        }
-        else
-        {
-            (local_db->record)[i].key = file[i].key;
-            strcpy( (local_db->record)[i].name, file[i].name );
-            (local_db->record)[i].value1 = file[i].value1;
-            (local_db->record)[i].value2 = file[i].value2;
-        }
-        
+    }
+}
+
+void copyFromFile( Record * file, DataBase * local_db )
+{
+    for( int i = 0; i< MAX_DATABASE_SIZE; i++ )
+    {
+        (local_db->record)[i].key = file[i].key;
+        strcpy( (local_db->record)[i].name, file[i].name );
+        (local_db->record)[i].value1 = file[i].value1;
+        (local_db->record)[i].value2 = file[i].value2;
     }
 }
 
@@ -40,8 +41,7 @@ void writeFileDatabase( DataBase * local_db )
     if (file != NULL) 
     {     
         Record tempDataBase[ MAX_DATABASE_SIZE ];
-        int toFile = 1;
-        copyData( toFile, tempDataBase, local_db );
+        copyToFile( tempDataBase, local_db );
         
         lock( file );
         fwrite( tempDataBase, sizeof( Record ), MAX_DATABASE_SIZE, file );
@@ -60,8 +60,7 @@ void readFileDatabase( DataBase * local_db )
         fread( tempDataBase, sizeof( Record ), MAX_DATABASE_SIZE, file );
         fclose(file);
         
-        int toDatabase = 0;
-        copyData( toDatabase, tempDataBase, local_db);
+        copyFromFile( tempDataBase, local_db);
         local_db->timeStamp = time( NULL );
     }
 }

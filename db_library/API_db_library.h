@@ -30,6 +30,7 @@ extern void readDataBase( DataBase * local_db );
 extern void writeDataBase( DataBase * local_db );
 extern void changeElementDataBase( DataBase * local_db, 
                                    Record * record  );
+extern void upgradeLocalDatabase( DataBase * local_db );
 
 extern void deleteDataBase( DataBase * local_db );
 

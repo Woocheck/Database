@@ -3,6 +3,7 @@
 
 #include "./API_db_library.h"
 #include "./db_utility.h"
+#include "./db_synchronization.h"
 
 void * threadInitDataBase( void * local_db );
 void * threadReadDataBase( void * local_db );

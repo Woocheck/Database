@@ -3,10 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <signal.h>
 
 #include "./API_db_library.h"
 #include "./db_threads.h"
 #include "./db_utility.h"
+#include "./db_synchronization.h"
 
 
 
@@ -96,4 +98,9 @@ List * newListDBChanges()
         return NULL;
     
     return newLocalList;
+}
+
+extern void upgradeLocalDatabase( DataBase * local_db )
+{
+    readRecordsChangesFromBuffer( local_db );
 }

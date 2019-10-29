@@ -9,8 +9,8 @@
 
 #include "../db_library/API_db_library.h"
 
-Record * makeRecord( int recordNumber );
-DataBase * makeDatabase( DataBase * local_db );
+Record * makeTestRecord( int recordNumber );
+DataBase * makeTestDatabase( DataBase * local_db );
 
 void printRecord( Record * record);
 void printDataBase( DataBase * dataBase );

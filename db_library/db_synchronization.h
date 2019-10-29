@@ -17,19 +17,20 @@ typedef struct singleChange
 typedef struct bufor
 {
     SingleChange chngeTab[ BUFOR_SIZE ];
-    int head;
-    int tail;
+    int          head;
+    int          tail;
 } Bufor;
 
 
 typedef struct sharedMemoryStruct
 {
-    Bufor cyclicalBuffer;
-    Record dbMap[ MAX_DATABASE_SIZE ];
+    Bufor   cyclicalBuffer;
+    Record  dbMap[ MAX_DATABASE_SIZE ];
 } SharedMemoryStruct;
 
 SharedMemoryStruct * initBuffer();
 void writeDataToBuffer( DataBase * local_db,  Record * record );
 void readDatafromBuffer( DataBase * local_db );
+void sendInfoAboutChanges( DataBase * local_db );
 
 #endif

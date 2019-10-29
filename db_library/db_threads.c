@@ -41,6 +41,8 @@ void * threadWriteDataBase( void * local_db )
 
         writeFileDatabase( (DataBase*) local_db );
 
+        sendInfoAboutChanges( (DataBase*) local_db );   
+
     pthread_mutex_unlock( &mutexFileOperations );
     pthread_exit( NULL );
 }

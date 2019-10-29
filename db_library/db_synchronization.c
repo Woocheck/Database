@@ -63,6 +63,7 @@ Record * readRecordFromBuffer( SharedMemoryStruct * sharedBffer, int positionInB
     Record * result = &(sharedBffer->dbMap[ positionInBuffer ]);
     return result;
 }
+
 void readRecordsChangesFromBuffer( DataBase * local_db )
 {
     int localDatabaseTimeStamp = local_db->timeStamp;
@@ -91,4 +92,15 @@ void readRecordsChangesFromBuffer( DataBase * local_db )
         local_db->timeStamp = time( NULL );
     }
     
+}
+
+void sendInfoAboutChanges( DataBase * local_db )
+{
+    while( local_db->listOfChanges->head != NULL )
+    {
+        int recordKey = pop( &(local_db->listOfChanges) );
+        Record * elementToWrite =  &((local_db->record)[ recordKey ]);
+        writeRecordToBuffer( local_db, elementToWrite );
+    }
+    kill( -1, SIGUSR1 );
 }
