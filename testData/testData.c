@@ -26,7 +26,7 @@ Record *  makeRecord( int recordNumber )
         record.value2 = pidNumber + recordNumber;
 
     return &record;
-};
+}
 
 DataBase * makeDatabase( DataBase * local_db )
 {
@@ -40,7 +40,7 @@ DataBase * makeDatabase( DataBase * local_db )
         (local_db->record)[i].value2 = record->value2;
     }
     return local_db;
-};
+}
 
 void printRecord( Record * record)
 {
@@ -49,7 +49,7 @@ void printRecord( Record * record)
                 record->name,
                 record->value1,
                 record->value2 );
-};
+}
 
 void printDataBase( DataBase * dataBase )
 {
@@ -62,4 +62,4 @@ void printDataBase( DataBase * dataBase )
                 dataBase->record[ i ].value2 );
     }
     printf("\n");
-};
+}

@@ -7,7 +7,7 @@
 #include <unistd.h> 
 #include <string.h>
 
-#include "../db_library/database.h"
+#include "../db_library/API_db_library.h"
 
 Record * makeRecord( int recordNumber );
 DataBase * makeDatabase( DataBase * local_db );

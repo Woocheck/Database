@@ -10,8 +10,7 @@
 #include <sys/stat.h>
 #include <signal.h>
 
-
-#include "./database.h"
+#include "./API_db_library.h"
 #include "./db_synchronization.h"
 
 int getNewPositionInBuffer( SharedMemoryStruct * buffer )
@@ -43,7 +42,7 @@ SharedMemoryStruct * initBuffer()
 				  0);
 
     return shm_ptr;
-};
+}
 
 void writeRecordToBuffer( DataBase * local_db,  Record * record )
 {
@@ -57,7 +56,7 @@ void writeRecordToBuffer( DataBase * local_db,  Record * record )
 
     changeRecord( &(sharedBuffer->dbMap[ record->key ]), record );
 
-};
+}
 
 Record * readRecordFromBuffer( SharedMemoryStruct * sharedBffer, int positionInBuffer )
 {

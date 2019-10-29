@@ -3,10 +3,9 @@
 
 #define BUFOR_SIZE 15
 
-
-
 #include <time.h>
-#include "./database.h"
+#include "./API_db_library.h"
+#include "./db_utility.h"
 
 typedef struct singleChange 
 {
