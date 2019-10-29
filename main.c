@@ -16,8 +16,21 @@ int main(void)
     
     local_db = newDataBase( MAX_DATABASE_SIZE );
     InitDataBase( local_db );
-    
 
+    makeTestDatabase( local_db );
+    printDataBase( local_db );
+    while(1)
+    {
+        for( int i = 0; i < MAX_DATABASE_SIZE; i++ )
+        {
+            changeElementDataBase( local_db, makeTestRecord( i ) );
+        }
+        sleep(1);
+        writeDataBase( local_db );
+        printDataBase( local_db );
+        
+    }
+    
     deleteDataBase( local_db );
     return 0;
 }
@@ -26,8 +39,8 @@ void sig_handler(int signo)
 {
     if (signo == SIGUSR1)
     {
-        upgradeLocalDatabase( local_db );
         printf("received SIGUSR1\n");
+        upgradeLocalDatabase( local_db );
     }
 }
 
