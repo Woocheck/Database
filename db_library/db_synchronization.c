@@ -32,8 +32,7 @@ SharedMemoryStruct * initBuffer()
 {
     SharedMemoryStruct * shm_ptr   = NULL;
 
-    int  shm_fd = 
-    ( "/buffer_shm", O_CREAT | O_EXCL | O_RDWR, 0600 );
+    int  shm_fd = shm_open( "/buffer_shm", O_CREAT | O_EXCL | O_RDWR, 0600 );
     if( shm_fd < 0 ) errorInfo( "Shared memory wasn't open. shm_fd: ", shm_fd );
     ftruncate( shm_fd, sizeof( SharedMemoryStruct ) );
 
