@@ -16,22 +16,29 @@ int main(void)
     
     local_db = newDataBase( MAX_DATABASE_SIZE );
     InitDataBase( local_db );
-
-    makeTestDatabase( local_db );
+    sleep( 2 );
     printDataBase( local_db );
-    while(1)
-    {
-        for( int i = 0; i < MAX_DATABASE_SIZE; i++ )
-        {
-            changeElementDataBase( local_db, makeTestRecord( i ) );
-        }
-        sleep(1);
-        writeDataBase( local_db );
-        printDataBase( local_db );
-        
-    }
+
+int licznik = 0;
+
+while(1)
+{
     
-    deleteDataBase( local_db );
+    for( int x = 6; x<10; x++)
+    {
+        changeElementDataBase( local_db, makeTestRecord( x ) );
+    }
+    writeDataBase( local_db );
+
+    readDataBase( local_db );
+    
+    sleep( 1 );
+    printf("licznik:  %d\n", licznik);
+    
+    printDataBase( local_db );
+    
+    licznik++;
+}
     return 0;
 }
 
@@ -41,6 +48,7 @@ void sig_handler(int signo)
     {
         printf("received SIGUSR1\n");
         upgradeLocalDatabase( local_db );
+   
     }
 }
 
