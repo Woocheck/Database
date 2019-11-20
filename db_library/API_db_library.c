@@ -7,11 +7,11 @@
 
 #include "./API_db_library.h"
 #include "./db_threads.h"
-#include "./db_utility.h"
-#include "./db_synchronization.h"
 
-
-
+extern void initSynchronisation()
+{
+    initSubscriptionList();
+}
 extern DataBase * newDataBase( size_t size )
 {
     DataBase * newLocalDatabase = ( DataBase * ) malloc (sizeof ( DataBase ) );
@@ -28,6 +28,7 @@ extern DataBase * newDataBase( size_t size )
     newLocalDatabase->size = size;
     newLocalDatabase->timeStamp = time( NULL );
     newLocalDatabase->listOfChanges = newListDBChanges();
+    newLocalDatabase->isOwnSignal = 0;
     return newLocalDatabase;
 }
 
@@ -42,6 +43,8 @@ void deleteDataBase( DataBase * local_db )
 
 void InitDataBase( DataBase * local_db )
 {
+    initMutex();
+    initSubscriptionList();
     pthread_t threadDataBaseInit;
     int threadResult;
     threadResult = pthread_create(&threadDataBaseInit, 
@@ -96,7 +99,8 @@ List * newListDBChanges()
     newLocalList->tail = ( node * ) malloc( sizeof( node ) );
     if( newLocalList->tail == NULL )
         return NULL;
-    
+
+    newLocalList->head = NULL;
     return newLocalList;
 }
 
@@ -104,3 +108,4 @@ extern void upgradeLocalDatabase( DataBase * local_db )
 {
     readRecordsChangesFromBuffer( local_db );
 }
+

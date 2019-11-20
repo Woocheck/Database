@@ -67,7 +67,7 @@ void readFileDatabase( DataBase * local_db )
 
 void errorInfo( const char * elementName, int threadResult )
 {
-    fprintf(stderr,"Error - create() in %s - code: %d\n", elementName,threadResult);
+    fprintf(stderr,"Error - in %s - code: %d\n", elementName,threadResult);
     exit(EXIT_FAILURE);
 }
 

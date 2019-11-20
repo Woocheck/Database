@@ -1,14 +1,22 @@
 #include <sys/file.h>
 
 #include "./db_threads.h"
-#include "./db_utility.h"
-#include "./API_db_library.h"
 
 pthread_mutex_t mutexFileOperations;
 
+int initMutex()
+{
+    if (pthread_mutex_init( &mutexFileOperations, NULL) != 0)
+    {
+        printf("\n mutex init failed\n");
+        return 1;
+    }
+    return 0;
+}
+
 void * threadInitDataBase( void * local_db )
 { 
-    pthread_mutex_trylock( &mutexFileOperations );
+    pthread_mutex_lock( &mutexFileOperations );
 
         if( access( DATA_BASE_FILE, F_OK ) != -1 ) 
         {
@@ -27,7 +35,7 @@ void * threadInitDataBase( void * local_db )
 
 void * threadReadDataBase( void * local_db )
 {
-    pthread_mutex_trylock( &mutexFileOperations );
+    pthread_mutex_lock( &mutexFileOperations );
 
         readFileDatabase( (DataBase*) local_db );
 
@@ -37,7 +45,7 @@ void * threadReadDataBase( void * local_db )
 
 void * threadWriteDataBase( void * local_db )
 {
-    pthread_mutex_trylock( &mutexFileOperations );
+    pthread_mutex_lock( &mutexFileOperations );
 
         writeFileDatabase( (DataBase*) local_db );
 

@@ -2,9 +2,10 @@
 #define DATABASE_H_
 
 #include <pthread.h> 
+
 #include "./db_changelist.h"
 
-#define MAX_DATABASE_SIZE      5
+#define MAX_DATABASE_SIZE      10
 #define MAX_DB_NAME_FIELD_SIZE 20
 #define DATA_BASE_FILE         "./database.db"
 
@@ -20,6 +21,7 @@ typedef struct database {
     size_t      size;
     int         timeStamp;
     List   *    listOfChanges;
+    int isOwnSignal;
 } DataBase;
 
 extern DataBase * newDataBase( size_t size );
@@ -33,5 +35,7 @@ extern void changeElementDataBase( DataBase * local_db,
 extern void upgradeLocalDatabase( DataBase * local_db );
 
 extern void deleteDataBase( DataBase * local_db );
+
+
 
 #endif 
